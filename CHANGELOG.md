@@ -3,7 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
-## [v2.0.0] - 2015-03-17
+## [v2.2.0] - 2019-01-12
+- Add default ignore functions (intval, strval and floatval)
+- Fix negative number whitelisting
+- Ignore the negative value if the scalar does not have a value field
+- Allow multiple files and directories
+-
+## [v2.1.0] - 2019-01-27
+- Check magic numbers in constant arrays.
+- Catch array[magic_number]
+- Whitelist option. Link to a file containing filenames to search
+
+## [v2.0.0] - 2018-03-17
 - Update dependencies. Required PHP 7.1
 - Add support for negative numbers.
 - Ignore '0' and '1' by default.

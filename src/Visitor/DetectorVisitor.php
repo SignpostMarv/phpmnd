@@ -43,19 +43,23 @@ class DetectorVisitor extends NodeVisitorAbstract
 
     public function enterNode(Node $node): ?int
     {
-        if ($node instanceof Const_) {
+        if ($this->isIgnoreableConst($node)) {
             return NodeTraverser::DONT_TRAVERSE_CHILDREN;
         }
 
-        if ($this->isNumber($node) || $this->isString($node)) {
-            /** @var LNumber|DNumber|String_ $scalar */
-            $scalar = $node;
-            if ($this->hasSign($node)) {
-                $node = $node->getAttribute('parent');
-                if ($this->isMinus($node)) {
-                    $scalar->value = -$scalar->value;
+        /** @var LNumber|DNumber|String_ $scalar */
+        $scalar = $node;
+        if ($this->hasSign($node)) {
+            $node = $node->getAttribute('parent');
+            if ($this->isMinus($node)) {
+                if (!isset($scalar->value)) {
+                    return null;
                 }
+                $scalar->value = -$scalar->value;
             }
+        }
+
+        if ($this->isNumber($scalar) || $this->isString($scalar)) {
             foreach ($this->option->getExtensions() as $extension) {
                 $extension->setOption($this->option);
                 if ($extension->extend($node)) {
@@ -67,6 +71,12 @@ class DetectorVisitor extends NodeVisitorAbstract
         }
 
         return null;
+    }
+
+    private function isIgnoreableConst(Node $node): bool
+    {
+        return $node instanceof Const_ &&
+            ($this->isNumber($node->value) || $this->isString($node->value));
     }
 
     private function isNumber(Node $node): bool

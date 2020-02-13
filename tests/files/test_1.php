@@ -47,6 +47,20 @@ class TEST_1
    }
 
    public function returnNegative() {
-      return -2;
+      return -1;
+   }
+
+   public function ignoreValues()
+   {
+       return [
+           intval(100),
+           floatval(3.14),
+           strval('10')
+       ];
+   }
+  
+   public function returnFromKey() {
+        $a = [];
+        return $a[1234];
    }
 }
